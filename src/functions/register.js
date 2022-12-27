@@ -63,13 +63,12 @@ async function registerInfoCommands(client, dir = "") {
   client.config.infoCommands.forEach((infoCommand) => {
     try {
       let url = `https://cms.bte-germany.de/items/botmessages/en_${infoCommand}/`;
-      console.log(url);
-      axios.get(url).catch((e) => {
-        throw new Error(e);
-      }).then((response) => {
+      axios.get(url).then((response) => {
         const cmd = new InfoCommand(client, infoCommand, response.data.data.title);
         client.commands.set(cmd.help.name, cmd);
-      })
+      }).catch((e) => {
+        console.log(e.message);
+      });
     } catch (error) {
       console.log(error);
       throw new TypeError("No Language files for " + infoCommand + ".");
